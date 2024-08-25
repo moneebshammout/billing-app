@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  billing_redis:
+    networks:
+        - web
+    container_name: billing_redis
+    image: redis:7.0-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - billing_redis_volume:/var/lib/redis/data
+
+  billing_db:
+    networks:
+        - web
+    container_name: billing_db
+    image: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=billing
+      - POSTGRES_PASSWORD=billing123
+      - POSTGRES_DB=billing
+    volumes:
+      - billing_db_volume:/var/lib/postgresql/data
+
+volumes:
+  billing_redis_volume: {}
+  billing_db_volume: {}
+
+networks:
+  web:
+    driver: bridge

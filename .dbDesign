@@ -1,0 +1,48 @@
+
+Table customers {
+  id integer [primary key]
+  subscription_plan_id integer
+  name varchar2
+  subscription_status varchar2
+  subscription_end_date timestap
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table subscription_plans {
+  id integer [primary key]
+  name varchar
+  isActive bool
+  price varchar2
+  discount integer
+  billing_interval varchar2
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table invoices{
+  id integer [primary key]
+  customer_id integer
+  subscription_plan varchar2
+  subscription_start_date timestamp
+  subscription_end_date timestamp
+  status varchar
+  amount varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table payments{
+  id integer [primary key]
+  invoice_id integer
+  payment_method varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+
+Ref: invoices.customer_id > customers.id // many-to-one
+
+Ref: customers.subscription_plan_id - subscription_plans.id
+
+Ref: invoices.id - payments.invoice_id
