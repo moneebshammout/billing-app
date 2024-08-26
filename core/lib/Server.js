@@ -9,6 +9,10 @@ const helmet = require('helmet')
 const { Assert: assert } = require('./assert')
 const { BaseMiddleware } = require('./BaseMiddleware')
 const { AbstractLogger } = require('./AbstractLogger')
+const { createBullBoard } = require('@bull-board/api')
+const { BullAdapter } = require('@bull-board/api/bullAdapter')
+const Queue = require('bull')
+const { ExpressAdapter } = require('@bull-board/express')
 
 // const swaggerUi = require('swagger-ui-express')
 // const swaggerDocument = require('../../public/docs/swagger.json')
@@ -16,7 +20,7 @@ const { AbstractLogger } = require('./AbstractLogger')
 // const swaggerConfig = require('../../config/swagger')
 
 class Server {
-  constructor ({ port, host, controllers, middlewares, errorMiddleware, cookieSecret, logger }) {
+  constructor ({ port, host, controllers, middlewares, errorMiddleware, cookieSecret, logger, queues }) {
     assert.integer(port, { required: true, positive: true })
     assert.string(host, { required: true, notEmpty: true })
     assert.object(controllers, { required: true, notEmpty: true, message: 'controllers param expects not empty array' })
@@ -27,11 +31,11 @@ class Server {
 
     logger.info('Server start initialization...')
     console.log(errorMiddleware)
-    return start({ port, host, controllers, middlewares, ErrorMiddleware: errorMiddleware, cookieSecret, logger })
+    return start({ port, host, controllers, middlewares, ErrorMiddleware: errorMiddleware, cookieSecret, logger, queues })
   }
 }
 
-function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieSecret, logger }) {
+function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieSecret, logger, queues }) {
   return new Promise(async (resolve, reject) => {
     const app = express()
 
@@ -96,6 +100,8 @@ function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieS
       return reject(e)
     }
 
+    app.use('/admin/queues', getQueueDashbaord(queues))
+
     // // Mounting swagger ui
     // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerConfig.options))
 
@@ -132,4 +138,14 @@ function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieS
   })
 }
 
+function getQueueDashbaord (queues) {
+  const serverAdapter = new ExpressAdapter()
+  serverAdapter.setBasePath('/admin/queues')
+  createBullBoard({
+    queues: queues.map(queue => new BullAdapter(new Queue(queue))),
+    serverAdapter: serverAdapter
+  })
+
+  return serverAdapter.getRouter()
+}
 module.exports = { Server }

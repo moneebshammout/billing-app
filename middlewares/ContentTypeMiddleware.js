@@ -9,6 +9,7 @@ class ContentTypeMiddleware extends BaseMiddleware {
   handler () {
     return async (req, res, next) => {
       try {
+        if (req.path.includes('admin/queues')) return next()
         // validate content-type
         if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
           const contentType = req.headers['Content-Type'] || req.headers['content-type']

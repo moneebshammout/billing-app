@@ -145,8 +145,13 @@ class BaseDAO extends Model {
     return this.query().delete().where({ ...where })
   }
 
-  static async baseFindOneWhere (where = {}) {
-    return await this.query().where({ ...where }).first()
+  static async baseFindOneWhere (where = {}, isLast = false) {
+    let query = this.query().where({ ...where })
+    if (isLast) {
+      query = query.orderBy('createdAt', 'desc')
+    }
+
+    return await query.first()
   }
 }
 

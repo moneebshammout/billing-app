@@ -1,4 +1,6 @@
 require('../globals')()
+require('dotenv').config()
+
 const config = require('../config')
 const { emailClient } = require('handlers/RootProvider')
 const Queue = require('bull')

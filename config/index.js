@@ -6,7 +6,6 @@ const redis = require('./redis')
 const queue = require('./queue')
 const rateLimting = require('./rateLimiting')
 const swagger = require('./swagger')
-const notificationType = require('./notificationType')
 const cacheRoutes = require('./cacheRoutes')
 const basicAuth = require('./basicAuth')
 const basicAuthRoutes = require('./basicAuthRoutes')
@@ -39,7 +38,6 @@ module.exports = {
   queue,
   rateLimting,
   swagger,
-  notificationType,
   mainInit,
   cacheRoutes,
   basicAuth,

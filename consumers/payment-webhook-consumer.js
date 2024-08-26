@@ -1,6 +1,10 @@
 require('../globals')()
-const SubscriptionActionModel = require('models/SubscriptionActionModel')
+require('dotenv').config()
 const config = require('config')
+const { Model } = require('objection')
+const Knex = require('knex')
+Model.knex(Knex(config.knex))
+const SubscriptionActionModel = require('models/SubscriptionActionModel')
 const Queue = require('bull')
 const SubscriptionPlanDAO = require('database/dao/SubscriptionPlanDAO')
 const CustomersDAO = require('database/dao/CustomerDAO')
@@ -62,7 +66,7 @@ queue.process(10, async function (job, done) {
 
   await PaymentDAO.baseCreate({
     invoiceId: invoice.id,
-    payment: meta.paymentMethod
+    paymentMethod: meta.paymentMethod
   })
 
   if (emailPayload) {
@@ -75,9 +79,9 @@ queue.process(10, async function (job, done) {
 const getSubscriptionEndDate = (subscriptionPlan, oldEndDate = null) => {
   let date = oldEndDate ? new Date(oldEndDate) : new Date()
 
-  if (subscriptionPlan.billingInterval === SubscriptionPlanModel.billingWorkflows.MONTHLY) {
+  if (subscriptionPlan.billingInterval === SubscriptionPlanModel.billingWorkflow.MONTHLY) {
     date.setMonth(date.getMonth() + 1)
-  } else if (subscriptionPlan.billingInterval === SubscriptionPlanModel.billingWorkflows.YEARLY) {
+  } else if (subscriptionPlan.billingInterval === SubscriptionPlanModel.billingWorkflow.YEARLY) {
     date.setFullYear(date.getFullYear() + 1)
   }
 

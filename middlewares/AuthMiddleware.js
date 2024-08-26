@@ -8,6 +8,7 @@ class AuthMiddleware extends BaseMiddleware {
 
   handler () {
     return (req, res, next) => {
+      if (req.path.includes('admin/queues')) return next()
       if (req.path.includes('external')) {
         const apiKey = req.headers['api-key'] || req.headers['Api-Key']
         if (!apiKey || apiKey !== config.app.apiKey) {

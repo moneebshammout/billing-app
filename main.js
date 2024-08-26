@@ -21,7 +21,13 @@ config.mainInit().then(() => {
     middlewares,
     errorMiddleware,
     cookieSecret: config.app.cookieSecret,
-    logger
+    logger,
+    queues: Object.values((() => {
+      const queues = config.queue
+      delete queues.redisUrl
+
+      return queues
+    })())
   })
 })
   .then(serverParams => {
