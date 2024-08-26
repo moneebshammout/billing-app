@@ -1,0 +1,5 @@
+1-manage queues
+- add cronjob which check each night for every customer subscription and sends remainder emails
+2-list invoices for customer
+3-subscription details for customer
+4-Queues ui and swagger and docker

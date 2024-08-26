@@ -10,7 +10,7 @@ const notificationType = require('./notificationType')
 const cacheRoutes = require('./cacheRoutes')
 const basicAuth = require('./basicAuth')
 const basicAuthRoutes = require('./basicAuthRoutes')
-
+const emailTemplates = require('./emailTemplates')
 const asyncConfigs = [
   app,
   knex,
@@ -43,5 +43,6 @@ module.exports = {
   mainInit,
   cacheRoutes,
   basicAuth,
-  basicAuthRoutes
+  basicAuthRoutes,
+  emailTemplates
 }

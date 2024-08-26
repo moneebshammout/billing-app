@@ -7,7 +7,7 @@ class CustomersDAO extends BaseDAO {
 
   static get relationMappings () {
     return {
-      Subscription: {
+      subscription: {
         relation: BaseDAO.BelongsToOneRelation,
         modelClass: `${__dirname}/SubscriptionPlanDAO`,
         join: {

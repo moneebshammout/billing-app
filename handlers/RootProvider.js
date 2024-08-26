@@ -1,6 +1,6 @@
-const { EmailClient, RedisClient, QueueClient } = require('../clients')
-const config = require(__folders.config)
-const logger = require('../util/logger')
+const { EmailClient, RedisClient, QueueClient } = require('clients')
+const config = require('config')
+const logger = require('util/logger')
 
 class RootProvider {
   constructor () {
@@ -10,11 +10,8 @@ class RootProvider {
       logger
     })
 
-    this.notificationClient = new QueueClient({
-      name: 'notifications',
-      url: config.queue.redisUrl,
-      logger
-    })
+    this.emailQueue = new QueueClient(config.queue.emailQueue)
+    this.paymentWebhookQueue = new QueueClient(config.queue.paymentWebhookQueue)
 
     // Loading SMTP Client
     this.emailClient = new EmailClient({

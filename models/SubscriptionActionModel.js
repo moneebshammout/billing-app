@@ -4,7 +4,7 @@ const joi = require('joi')
  * @swagger
  *
  * definitions:
- *   SubscriptionPlan:
+ *   SubscriptionAction:
  *     allOf:
  *       - required:
  *         - id
@@ -25,71 +25,70 @@ const joi = require('joi')
  */
 const schema = {
   ...BaseModel.genericSchema,
-
-  name: new Rule({
+  paymentData: new Rule({
     validator: v => {
       try {
-        joi.assert(v, joi.string().min(3))
+        joi.assert(v, joi.object())
+      } catch (e) { return e.message }
+      return true
+    },
+    description: 'object;'
+  }),
+
+  paymentMethod: new Rule({
+    validator: v => {
+      try {
+        joi.assert(v, joi.string().valid(...Object.values(SubscriptionActionModel.PaymentMethods)))
       } catch (e) { return e.message }
       return true
     },
     description: 'string;'
   }),
-
-  isActive: new Rule({
+  autoRenew: new Rule({
     validator: v => {
       try {
-        joi.assert(v, joi.bool())
+        joi.assert(v, joi.boolean())
       } catch (e) { return e.message }
       return true
     },
     description: 'boolean;'
-  }),
-
-  price: new Rule({
-    validator: v => {
-      try {
-        joi.assert(v, joi.string().min(1))
-        const float = parseFloat(v)
-        if (isNaN(float)) throw new Error('Invalid price')
-      } catch (e) { return e.message }
-      return true
-    },
-    description: 'string;'
-  }),
-
-  discount: new Rule({
-    validator: v => {
-      try {
-        joi.assert(v, joi.number().min(0).max(100))
-      } catch (e) { return e.message }
-      return true
-    },
-    description: 'number;'
-  }),
-
-  billingInterval: new Rule({
-    validator: v => {
-      try {
-        joi.assert(v, joi.string().valid(...Object.values(SubscriptionPlanModel.billingWorkflow)))
-      } catch (e) { return e.message }
-      return true
-    },
-    description: 'string;'
   })
 }
 
-class SubscriptionPlanModel extends BaseModel {
+class SubscriptionActionModel extends BaseModel {
   static get schema () {
     return schema
   }
 
-  static get billingWorkflow () {
+  static get PaymentMethods () {
     return {
-      MONTHLY: 'monthly',
-      YEARLY: 'yearly'
+      VISA: 'visa',
+      MASTERCARD: 'mastercard',
+      AMEX: 'amex',
+      CREDIT: 'credit',
+      PAYPAL: 'paypal'
+    }
+  }
+
+  static get statusWorkflow () {
+    return {
+      ACTIVE: 'active',
+      PROCCESSING: 'proccessing',
+      INACTIVE: 'inactive',
+      CANCELED: 'canceled',
+      OVERDUE: 'overdue',
+      FAILED: 'failed'
+    }
+  }
+
+  static get actions () {
+    return {
+      SUBSCRIBE: 'subscribe',
+      CANCEL: 'cancel',
+      RENEW: 'renew',
+      UPGRADE: 'upgrade'
     }
   }
 }
 
-module.exports = SubscriptionPlanModel
+module.exports = SubscriptionActionModel

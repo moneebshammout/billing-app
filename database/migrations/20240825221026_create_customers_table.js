@@ -6,6 +6,7 @@ exports.up = function(knex) {
         table.string('name');
         table.string('subscription_status');
         table.timestamp('subscription_end_date');
+        table.boolean('auto_renew_subscription');
         table.timestamp('created_at');
         table.timestamp('updated_at');
     })

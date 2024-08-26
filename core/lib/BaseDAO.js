@@ -125,10 +125,10 @@ class BaseDAO extends Model {
     return Number(result.count)
   }
 
-  static async baseGetById (id) {
+  static async baseGetById (id, relations = []) {
     assert.id(id, { required: true })
 
-    const data = await this.query().findById(id)
+    const data = await this.query().findById(id).withGraphFetched(relations)
     if (!data) throw this.errorEmptyResponse()
     return data
   }
