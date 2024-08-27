@@ -13,6 +13,9 @@ This is a billing app microservice for a SaaS application. It handles subscripti
 
 ![Billing_DB_Design](https://github.com/user-attachments/assets/2c90045d-546c-43c8-a261-1f58c9461b88)
 
+## Background job monitoring UI
+
+![image](https://github.com/user-attachments/assets/13ad90df-c71d-466b-9fb3-aef3f2d45048)
 
 ## Customer Subscription Journey
 
