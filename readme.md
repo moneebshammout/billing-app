@@ -33,6 +33,7 @@ The journey starts when a customer requests one of the subscription actions (e.g
 1. Fill in the `.env` file based on the `.env.example` template.
 2. Run `docker-compose up` to start the server.
 3. The server will be running on `localhost:4000`.
+4. Use this postman workspace which contain deep documentation for service apis `https://www.postman.com/payload-architect-5997443/workspace/billing-app`
 
 ## Deployment Strategy
 
