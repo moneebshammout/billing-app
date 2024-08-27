@@ -6,9 +6,12 @@ This is a billing app microservice for a SaaS application. It handles subscripti
 
 ## System Design
 
+![Billing_APP_SYSTEM_DESIGN drawio](https://github.com/user-attachments/assets/4cf473a9-b3d7-4240-918b-5bffbe6458b8)
 
 
 ## Database Design
+
+![Billing_DB_Design](https://github.com/user-attachments/assets/2c90045d-546c-43c8-a261-1f58c9461b88)
 
 
 ## Customer Subscription Journey
