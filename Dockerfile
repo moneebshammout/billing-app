@@ -1,24 +1,13 @@
-FROM node:alpine
+FROM node:22.7.0-alpine3.19
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install pm2
-RUN npm install pm2 -g
-
-# Bundle app source
-COPY . .
-
-# Install app dependencies
-#COPY package.json .
-# For npm@5 or later, copy package-lock.json as well
-# COPY package.json package-lock.json .
+COPY package*.json ./
 
 RUN npm install
 
-# Bundle app source
 COPY . .
 
-EXPOSE 8080 7000
+EXPOSE 4000
 
-CMD ["pm2-runtime", "ecosystem.config.js", "--env", "env_development"]
+CMD ["sh", "-c", "npm run migrate && npm run seed && npm run start-all"]

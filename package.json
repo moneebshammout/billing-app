@@ -13,7 +13,6 @@
     "test-script": "start-server-and-test start-server http://localhost:4000 test",
     "coverage": "nyc --reporter=html --reporter=text mocha test/**/*.test.js",
     "update:packages": "node wipe-dependencies.js && rm -rf node_modules && npm update --save-dev && npm update --save",
-    "dev-stack": "docker compose -f docker-compose.dev.yaml up ",
     "notifications-consumer": "NODE_PATH=. node consumers/notifications-consumer.js",
     "payment-webhook-consumer": "NODE_PATH=. node consumers/payment-webhook-consumer.js",
     "subscription-date-queue": "NODE_PATH=. node consumers/subscription-date-queue.js",

@@ -5,10 +5,7 @@ const email = require('./email')
 const redis = require('./redis')
 const queue = require('./queue')
 const rateLimting = require('./rateLimiting')
-const swagger = require('./swagger')
 const cacheRoutes = require('./cacheRoutes')
-const basicAuth = require('./basicAuth')
-const basicAuthRoutes = require('./basicAuthRoutes')
 const emailTemplates = require('./emailTemplates')
 const asyncConfigs = [
   app,
@@ -37,10 +34,7 @@ module.exports = {
   redis,
   queue,
   rateLimting,
-  swagger,
   mainInit,
   cacheRoutes,
-  basicAuth,
-  basicAuthRoutes,
   emailTemplates
 }

@@ -25,6 +25,24 @@ services:
     volumes:
       - billing_db_volume:/var/lib/postgresql/data
 
+  billing_app:
+    networks:
+      - web
+    env_file:
+      - .env
+    container_name: billing_app
+    build: .
+    ports:
+      - '4000:4000'
+    depends_on:
+      - billing_redis
+      - billing_db
+    environment:
+      - DB_HOST=billing_db
+      - REDIS_HOST=billing_redis
+      - QUEUE_REDIS_HOST=redis://billing_redis:6379
+      - APP_HOST=billing_app
+
 volumes:
   billing_redis_volume: {}
   billing_db_volume: {}

@@ -13,14 +13,13 @@ const { createBullBoard } = require('@bull-board/api')
 const { BullAdapter } = require('@bull-board/api/bullAdapter')
 const Queue = require('bull')
 const { ExpressAdapter } = require('@bull-board/express')
-
 // const swaggerUi = require('swagger-ui-express')
 // const swaggerDocument = require('../../public/docs/swagger.json')
 // const swStats = require('swagger-stats')
 // const swaggerConfig = require('../../config/swagger')
 
 class Server {
-  constructor ({ port, host, controllers, middlewares, errorMiddleware, cookieSecret, logger, queues }) {
+  constructor ({ port, host, controllers, middlewares, errorMiddleware, cookieSecret, logger, queuesConfig }) {
     assert.integer(port, { required: true, positive: true })
     assert.string(host, { required: true, notEmpty: true })
     assert.object(controllers, { required: true, notEmpty: true, message: 'controllers param expects not empty array' })
@@ -31,11 +30,11 @@ class Server {
 
     logger.info('Server start initialization...')
     console.log(errorMiddleware)
-    return start({ port, host, controllers, middlewares, ErrorMiddleware: errorMiddleware, cookieSecret, logger, queues })
+    return start({ port, host, controllers, middlewares, ErrorMiddleware: errorMiddleware, cookieSecret, logger, queuesConfig })
   }
 }
 
-function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieSecret, logger, queues }) {
+function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieSecret, logger, queuesConfig }) {
   return new Promise(async (resolve, reject) => {
     const app = express()
 
@@ -100,7 +99,7 @@ function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieS
       return reject(e)
     }
 
-    app.use('/admin/queues', getQueueDashbaord(queues))
+    app.use('/admin/queues', getQueueDashbaord(queuesConfig))
 
     // // Mounting swagger ui
     // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerConfig.options))
@@ -138,11 +137,13 @@ function start ({ port, host, controllers, middlewares, ErrorMiddleware, cookieS
   })
 }
 
-function getQueueDashbaord (queues) {
+function getQueueDashbaord (queuesConfig) {
   const serverAdapter = new ExpressAdapter()
   serverAdapter.setBasePath('/admin/queues')
+  const conn = queuesConfig.redisUrl
+  delete queuesConfig.redisUrl
   createBullBoard({
-    queues: queues.map(queue => new BullAdapter(new Queue(queue))),
+    queues: Object.values(queuesConfig).map(queue => new BullAdapter(new Queue(queue, conn))),
     serverAdapter: serverAdapter
   })
 

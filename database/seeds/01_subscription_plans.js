@@ -39,5 +39,7 @@ exports.seed = function (knex) {
           billing_interval: 'yearly'
         }
       ])
+    }).catch((error) => {
+      console.log(error)
     })
 }

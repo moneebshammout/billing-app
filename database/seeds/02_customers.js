@@ -33,5 +33,7 @@ exports.seed = function (knex) {
           subscription_end_date: '2023-12-12'
         }
       ])
+    }).catch((error) => {
+      console.log(error)
     })
 }
